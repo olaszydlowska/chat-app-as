@@ -1,0 +1,85 @@
+<div>
+  <div>
+    <div *ngIf="numberOfUsers > 0" mat-line style="text-align: center; margin-top: 20px;">
+      <span style="text-align: center">
+        <b
+          >There are {{ numberOfUsers }}
+          {{ numberOfUsers === 1 ? "participant" : "participants" }}</b
+        >
+      </span>
+    </div>
+  </div>
+  <div class="chat-container">
+    <mat-card style="height: 100%; display: block;">
+      <mat-list class="chat-list">
+        <mat-list-item
+          *ngFor="let message of messages"
+          [ngClass]="[
+            message?.Action === actionEnum.MESSAGE && message.User.Id === user.Id
+              ? 'chat-user-list-item'
+              : message?.Action === actionEnum.MESSAGE &&
+                message.User.Id !== user.Id
+              ? 'chat-list-item'
+              : ''
+          ]"
+        >
+          <h3 mat-line *ngIf="message.Action === actionEnum.MESSAGE">
+            <b>{{ message.User.Name }}</b>
+          </h3>
+          <p mat-line *ngIf="message.Action === actionEnum.MESSAGE">
+            <span> {{ message?.MessageContent }}</span>
+          </p>
+  
+          <p
+            mat-line
+            *ngIf="message.Action === actionEnum.JOINED"
+            class="chat-action"
+          >
+            <span> {{ message.User.Name }} joined the conversation </span>
+          </p>
+  
+          <p
+            mat-line
+            *ngIf="message.Action === actionEnum.LEFT"
+            class="chat-action"
+          >
+            <span> {{ message.User.Name }} left the conversation </span>
+          </p>
+        </mat-list-item>
+      </mat-list>
+  
+      <div class="chat-input-container">
+        <span class="chat-action" *ngIf="usersTyping.length > 0"
+          >{{ usersTyping }} is typing...</span
+        >
+        <div style="display: flex">
+          <mat-form-field style="width: 100%">
+            <input
+              matInput
+              placeholder="Type here..."
+              [formControl]="messageContent"
+              (keypress)="onTyping()"
+              (keyup.enter)="onSendMessage()"
+            />
+            <mat-hint align="end"
+              >{{ messageContent.value?.length }}/200</mat-hint
+            >
+            <mat-error
+              >Exceeded the maximum number of characters allowed for the message
+              body</mat-error
+            >
+          </mat-form-field>
+          <button
+            mat-icon-button
+            style="margin-top: 15px"
+            color="primary"
+            [disabled]="!messageContent.value || messageContent.invalid"
+            (click)="onSendMessage()"
+          >
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>What's your nickname?</h2>
+
+<mat-dialog-content>
+  <mat-form-field>
+    <input
+      matInput
+      autocomplete="new-password"
+      placeholder="Username"
+      [formControl]="username"
+      (keyup.enter)="onSave()"
+    />
+    <mat-error>Username is required</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  <button mat-raised-button [disabled]="username.invalid" (click)="onSave()">
+    Ok
+  </button>
+</mat-dialog-actions>
